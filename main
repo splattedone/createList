@@ -1,0 +1,45 @@
+Sub CreateList()
+    'Open InternetExplorer
+        Set objIeBrowser = CreateObject("InternetExplorer.Application")
+        objIeBrowser.Visible = True
+        objIeBrowser.Navigate2 "https://companyurl.com/location/"
+        Application.Wait Now + TimeValue("00:00:02")
+        
+        'Find the proper fields, enter an account number, and search.
+            Set locationCode = objPage.getElementByName("LocationCode")
+            Set searchButton = objPage.getElementByName("butSearch")
+            searchButton.Click
+
+        'Create a loop to go through each account number in column A
+            Dim i As Long
+            For i = 1 To Rows.Count
+                Dim currentCell As String
+                currentCell = ("A" & i)
+                Set locationCode = objIeBrowser.Document.getElementsByName("LocationCode")(0).Value = currentCell
+
+                searchButton.Click
+                
+                Application.Wait Now + TimeValue("00:00:05")
+                
+            'Find and click the "Add to List" button
+                Set addButton = objPage.getElementByName("butAdd")
+                addButton.Click
+                
+                Application.Wait Now + TimeValue("00:00:02")
+                
+            'Select first list from popup window
+                Application.SendKeys ("{TAB}")
+                Application.SendKeys ("{DOWN}")
+                Application.SendKeys ("{TAB}")
+                Application.SendKeys ("{ENTER}")
+                
+                Application.Wait Now + TimeValue("00:00:02")
+
+            'Reset page and restart loop
+                
+                objIeBrowser.Navigate2 "https://companyURL.com/location/"
+
+                Application.Wait Now + TimeValue("00:00:02")
+                
+            Next i
+End Sub
